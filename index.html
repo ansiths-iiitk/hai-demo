@@ -72,15 +72,12 @@
 <section id="part1">
 <div id="intro">
   <h2>Part 1 · Decide with an AI</h2>
-  <p>You are a class teacher. For each student, look at the record and decide:</p>
-  <div class="question">Will this student <b>need help</b>, or <b>be fine</b>?</div>
-  <p><b>Needs help</b> means the student went on to fail the final exam (below 10 out of 20).</p>
+  <div class="question">You are a class teacher. Will this student <b>need help</b>, or <b>be fine</b>?</div>
   <ul>
-    <li>There are <b>3 rounds of 4 students</b>. It takes about 10 minutes.</li>
-    <li>Each answer is final. You cannot go back.</li>
-    <li>Go with your own judgement. There is no time limit.</li>
+    <li><b>Needs help</b> = failed the final exam (below 10 out of 20).</li>
+    <li>3 rounds of 6 students. Each answer is final.</li>
   </ul>
-  <p class="small">The records are real and anonymous: secondary-school students in Portugal (UCI Student Performance data, Cortez and Silva, 2008). For every student, the real final-exam result is known.</p>
+  <p class="small">Real, anonymous student records (UCI Student Performance data). The real result is known for every student.</p>
   <button class="big" onclick="startTrust()">Start round 1</button>
 </div>
 
@@ -105,18 +102,18 @@
 <div id="result" class="hidden">
   <h2>Your score card</h2>
   <div class="pollbox">
-    <div>Wrong AI suggestions you followed (out of 2):</div>
+    <div>Wrong AI suggestions you followed (out of 4):</div>
     <div class="score" id="pollNum"></div>
     <div>Enter this number in the class poll.</div>
   </div>
   <table id="scoreTable"></table>
   <p id="scoreNotes"></p>
-  <p class="small">Four students per round is a small number: one lucky guess changes a round by 25%. Read your card as what happened in these rounds, not as a measure of you. The class total is the number that matters.</p>
+  <p class="small">A few students per round is a small sample. The class total matters more than your own number.</p>
   <h3>Save your score card</h3>
   <p>Your name (optional): <input type="text" id="name1" placeholder="Type your name" oninput="drawScoreCard()"></p>
   <canvas id="scoreCanvas" width="1200" height="640"></canvas>
   <button onclick="savePNG('scoreCanvas','my_ai_score_card.png')">Download my score card</button>
-  <details><summary>See all 12 students and what really happened</summary>
+  <details><summary>See all 18 students and what really happened</summary>
     <table id="answerTable"></table>
     <p class="small" id="aboutAI"></p>
   </details>
@@ -127,7 +124,7 @@
 <!-- ============================================================ PART 2 -->
 <section id="part2" class="hidden">
   <h2>Part 2 · Design the AI</h2>
-  <p>The same AI will now run for a whole college. Every week it gives each student a <b>risk</b>: the chance, from 0% to 100%, that the student will need help. Above 50%, it says "needs help". <b>You decide how it works with the teachers.</b></p>
+  <p>The same AI now runs for a whole college. It gives each student a <b>risk</b> from 0% to 100%; above 50% it says "needs help". <b>You decide how it works with the teachers.</b></p>
 
   <div class="opt">1. When the AI says a student needs help, what happens?</div>
   <div id="q_mode">
@@ -163,18 +160,18 @@
 </main>
 
 <script>
-const DATA = {"rounds": [[{"id": 11, "row": 100, "g1": 9, "abs": 12, "fail": 0, "study": "under 2 hours", "higher": "Yes", "g3": 8, "need": 1, "p": 0.317, "ai": 0, "contrib": {"g1": 2.36, "abs": 0.33, "fail": -0.08, "study": 0.1, "higher": -0.05}}, {"id": 12, "row": 9, "g1": 12, "abs": 0, "fail": 0, "study": "2 to 5 hours", "higher": "Yes", "g3": 13, "need": 0, "p": 0.014, "ai": 0, "contrib": {"g1": -0.58, "abs": -0.15, "fail": -0.08, "study": -0.01, "higher": -0.05}}, {"id": 13, "row": 44, "g1": 10, "abs": 14, "fail": 1, "study": "2 to 5 hours", "higher": "Yes", "g3": 11, "need": 0, "p": 0.14, "ai": 0, "contrib": {"g1": 1.42, "abs": 0.14, "fail": 0.23, "study": -0.0, "higher": -0.03}}, {"id": 14, "row": 175, "g1": 7, "abs": 4, "fail": 2, "study": "2 to 5 hours", "higher": "Yes", "g3": 8, "need": 1, "p": 0.863, "ai": 1, "contrib": {"g1": 5.21, "abs": -0.01, "fail": 0.63, "study": -0.03, "higher": -0.03}}], [{"id": 21, "row": 10, "g1": 14, "abs": 2, "fail": 0, "study": "2 to 5 hours", "higher": "Yes", "g3": 14, "need": 0, "p": 0.002, "ai": 0, "contrib": {"g1": -2.73, "abs": -0.02, "fail": -0.07, "study": 0.0, "higher": -0.06}}, {"id": 22, "row": 150, "g1": 9, "abs": 24, "fail": 0, "study": "2 to 5 hours", "higher": "Yes", "g3": 9, "need": 1, "p": 0.165, "ai": 0, "contrib": {"g1": 2.89, "abs": -0.45, "fail": -0.07, "study": -0.03, "higher": -0.03}}, {"id": 23, "row": 279, "g1": 7, "abs": 12, "fail": 3, "study": "under 2 hours", "higher": "No", "g3": 5, "need": 1, "p": 0.902, "ai": 1, "contrib": {"g1": 4.39, "abs": 0.1, "fail": 0.8, "study": -0.03, "higher": 0.45}}, {"id": 24, "row": 405, "g1": 10, "abs": 16, "fail": 1, "study": "under 2 hours", "higher": "No", "g3": 11, "need": 0, "p": 0.175, "ai": 0, "contrib": {"g1": 1.72, "abs": -0.27, "fail": 0.28, "study": 0.34, "higher": 0.31}}], [{"id": 31, "row": 284, "g1": 7, "abs": 4, "fail": 2, "study": "under 2 hours", "higher": "No", "g3": 6, "need": 1, "p": 0.893, "ai": 1, "contrib": {"g1": 4.11, "abs": 0.0, "fail": 1.15, "study": 0.09, "higher": 0.17}}, {"id": 32, "row": 397, "g1": 10, "abs": 18, "fail": 0, "study": "2 to 5 hours", "higher": "Yes", "g3": 14, "need": 0, "p": 0.166, "ai": 0, "contrib": {"g1": 1.38, "abs": 0.57, "fail": -0.08, "study": -0.01, "higher": -0.05}}, {"id": 33, "row": 155, "g1": 9, "abs": 22, "fail": 0, "study": "under 2 hours", "higher": "Yes", "g3": 6, "need": 1, "p": 0.229, "ai": 0, "contrib": {"g1": 2.89, "abs": -0.4, "fail": -0.07, "study": 0.34, "higher": -0.03}}, {"id": 34, "row": 12, "g1": 12, "abs": 0, "fail": 0, "study": "under 2 hours", "higher": "Yes", "g3": 12, "need": 0, "p": 0.014, "ai": 0, "contrib": {"g1": -0.61, "abs": 0.08, "fail": -0.07, "study": 0.34, "higher": -0.03}}]], "design": [{"id": 41, "row": 256, "g1": 7, "abs": 26, "fail": 1, "study": "under 2 hours", "higher": "No", "g3": 8, "need": 1, "p": 0.86, "ai": 1, "contrib": {"g1": 4.39, "abs": 0.27, "fail": 0.22, "study": -0.03, "higher": 0.45}}, {"id": 42, "row": 10, "g1": 14, "abs": 2, "fail": 0, "study": "2 to 5 hours", "higher": "Yes", "g3": 14, "need": 0, "p": 0.002, "ai": 0, "contrib": {"g1": -2.73, "abs": -0.02, "fail": -0.07, "study": 0.0, "higher": -0.06}}, {"id": 43, "row": 441, "g1": 8, "abs": 4, "fail": 0, "study": "2 to 5 hours", "higher": "Yes", "g3": 9, "need": 1, "p": 0.494, "ai": 0, "contrib": {"g1": 4.05, "abs": -0.01, "fail": -0.07, "study": -0.03, "higher": -0.03}}, {"id": 44, "row": 578, "g1": 8, "abs": 4, "fail": 1, "study": "2 to 5 hours", "higher": "Yes", "g3": 10, "need": 0, "p": 0.514, "ai": 1, "contrib": {"g1": 3.38, "abs": 0.01, "fail": 0.22, "study": 0.0, "higher": -0.06}}, {"id": 45, "row": 150, "g1": 9, "abs": 24, "fail": 0, "study": "2 to 5 hours", "higher": "Yes", "g3": 9, "need": 1, "p": 0.165, "ai": 0, "contrib": {"g1": 2.89, "abs": -0.45, "fail": -0.07, "study": -0.03, "higher": -0.03}}, {"id": 46, "row": 557, "g1": 7, "abs": 2, "fail": 3, "study": "2 to 5 hours", "higher": "Yes", "g3": 10, "need": 0, "p": 0.921, "ai": 1, "contrib": {"g1": 4.11, "abs": -0.02, "fail": 1.79, "study": -0.01, "higher": -0.02}}], "model": {"acc": 0.901, "n": 649, "fn": 42, "fp": 22, "tp": 58, "tn": 527}};
+const DATA = {"rounds": [[{"id": 11, "row": 89, "g1": 9, "abs": 6, "fail": 0, "study": "2 to 5 hours", "higher": "Yes", "g3": 10, "need": 0, "p": 0.248, "ai": 0, "contrib": {"g1": 2.36, "abs": 0.09, "fail": -0.08, "study": -0.01, "higher": -0.05}, "kind": "C"}, {"id": 12, "row": 528, "g1": 9, "abs": 5, "fail": 0, "study": "under 2 hours", "higher": "Yes", "g3": 9, "need": 1, "p": 0.26, "ai": 0, "contrib": {"g1": 2.36, "abs": 0.05, "fail": -0.08, "study": 0.1, "higher": -0.05}, "kind": "A"}, {"id": 13, "row": 9, "g1": 12, "abs": 0, "fail": 0, "study": "2 to 5 hours", "higher": "Yes", "g3": 13, "need": 0, "p": 0.014, "ai": 0, "contrib": {"g1": -0.58, "abs": -0.15, "fail": -0.08, "study": -0.01, "higher": -0.05}, "kind": "F"}, {"id": 14, "row": 521, "g1": 8, "abs": 0, "fail": 0, "study": "2 to 5 hours", "higher": "Yes", "g3": 10, "need": 0, "p": 0.516, "ai": 1, "contrib": {"g1": 4.05, "abs": 0.08, "fail": -0.07, "study": -0.03, "higher": -0.03}, "kind": "B"}, {"id": 15, "row": 447, "g1": 8, "abs": 8, "fail": 0, "study": "under 2 hours", "higher": "No", "g3": 9, "need": 1, "p": 0.535, "ai": 1, "contrib": {"g1": 3.45, "abs": 0.06, "fail": -0.07, "study": 0.06, "higher": 0.22}, "kind": "D"}, {"id": 16, "row": 175, "g1": 7, "abs": 4, "fail": 2, "study": "2 to 5 hours", "higher": "Yes", "g3": 8, "need": 1, "p": 0.863, "ai": 1, "contrib": {"g1": 5.21, "abs": -0.01, "fail": 0.63, "study": -0.03, "higher": -0.03}, "kind": "E"}], [{"id": 21, "row": 176, "g1": 8, "abs": 2, "fail": 0, "study": "under 2 hours", "higher": "Yes", "g3": 10, "need": 0, "p": 0.596, "ai": 1, "contrib": {"g1": 4.05, "abs": 0.04, "fail": -0.07, "study": 0.34, "higher": -0.03}, "kind": "B"}, {"id": 22, "row": 1, "g1": 9, "abs": 2, "fail": 0, "study": "2 to 5 hours", "higher": "Yes", "g3": 11, "need": 0, "p": 0.219, "ai": 0, "contrib": {"g1": 2.36, "abs": -0.07, "fail": -0.08, "study": -0.01, "higher": -0.05}, "kind": "C"}, {"id": 23, "row": 279, "g1": 7, "abs": 12, "fail": 3, "study": "under 2 hours", "higher": "No", "g3": 5, "need": 1, "p": 0.902, "ai": 1, "contrib": {"g1": 4.39, "abs": 0.1, "fail": 0.8, "study": -0.03, "higher": 0.45}, "kind": "E"}, {"id": 24, "row": 52, "g1": 10, "abs": 4, "fail": 0, "study": "under 2 hours", "higher": "Yes", "g3": 9, "need": 1, "p": 0.091, "ai": 0, "contrib": {"g1": 1.34, "abs": 0.01, "fail": -0.07, "study": -0.03, "higher": -0.06}, "kind": "A"}, {"id": 25, "row": 10, "g1": 14, "abs": 2, "fail": 0, "study": "2 to 5 hours", "higher": "Yes", "g3": 14, "need": 0, "p": 0.002, "ai": 0, "contrib": {"g1": -2.73, "abs": -0.02, "fail": -0.07, "study": 0.0, "higher": -0.06}, "kind": "F"}, {"id": 26, "row": 148, "g1": 8, "abs": 2, "fail": 1, "study": "under 2 hours", "higher": "Yes", "g3": 9, "need": 1, "p": 0.529, "ai": 1, "contrib": {"g1": 3.45, "abs": -0.02, "fail": 0.23, "study": 0.06, "higher": -0.03}, "kind": "D"}], [{"id": 31, "row": 624, "g1": 8, "abs": 0, "fail": 1, "study": "under 2 hours", "higher": "Yes", "g3": 9, "need": 1, "p": 0.686, "ai": 1, "contrib": {"g1": 4.05, "abs": 0.08, "fail": 0.28, "study": 0.34, "higher": -0.03}, "kind": "D"}, {"id": 32, "row": 12, "g1": 12, "abs": 0, "fail": 0, "study": "under 2 hours", "higher": "Yes", "g3": 12, "need": 0, "p": 0.014, "ai": 0, "contrib": {"g1": -0.61, "abs": 0.08, "fail": -0.07, "study": 0.34, "higher": -0.03}, "kind": "F"}, {"id": 33, "row": 465, "g1": 9, "abs": 9, "fail": 1, "study": "2 to 5 hours", "higher": "Yes", "g3": 8, "need": 1, "p": 0.289, "ai": 0, "contrib": {"g1": 2.36, "abs": 0.07, "fail": 0.22, "study": 0.0, "higher": -0.06}, "kind": "A"}, {"id": 34, "row": 43, "g1": 9, "abs": 0, "fail": 0, "study": "under 2 hours", "higher": "Yes", "g3": 10, "need": 0, "p": 0.325, "ai": 0, "contrib": {"g1": 2.89, "abs": 0.08, "fail": -0.07, "study": 0.34, "higher": -0.03}, "kind": "C"}, {"id": 35, "row": 284, "g1": 7, "abs": 4, "fail": 2, "study": "under 2 hours", "higher": "No", "g3": 6, "need": 1, "p": 0.893, "ai": 1, "contrib": {"g1": 4.11, "abs": 0.0, "fail": 1.15, "study": 0.09, "higher": 0.17}, "kind": "E"}, {"id": 36, "row": 489, "g1": 8, "abs": 0, "fail": 1, "study": "under 2 hours", "higher": "No", "g3": 10, "need": 0, "p": 0.755, "ai": 1, "contrib": {"g1": 4.05, "abs": 0.08, "fail": 0.28, "study": 0.34, "higher": 0.31}, "kind": "B"}]], "design": [{"id": 41, "row": 256, "g1": 7, "abs": 26, "fail": 1, "study": "under 2 hours", "higher": "No", "g3": 8, "need": 1, "p": 0.86, "ai": 1, "contrib": {"g1": 4.39, "abs": 0.27, "fail": 0.22, "study": -0.03, "higher": 0.45}}, {"id": 42, "row": 10, "g1": 14, "abs": 2, "fail": 0, "study": "2 to 5 hours", "higher": "Yes", "g3": 14, "need": 0, "p": 0.002, "ai": 0, "contrib": {"g1": -2.73, "abs": -0.02, "fail": -0.07, "study": 0.0, "higher": -0.06}}, {"id": 43, "row": 441, "g1": 8, "abs": 4, "fail": 0, "study": "2 to 5 hours", "higher": "Yes", "g3": 9, "need": 1, "p": 0.494, "ai": 0, "contrib": {"g1": 4.05, "abs": -0.01, "fail": -0.07, "study": -0.03, "higher": -0.03}}, {"id": 44, "row": 578, "g1": 8, "abs": 4, "fail": 1, "study": "2 to 5 hours", "higher": "Yes", "g3": 10, "need": 0, "p": 0.514, "ai": 1, "contrib": {"g1": 3.38, "abs": 0.01, "fail": 0.22, "study": 0.0, "higher": -0.06}}, {"id": 45, "row": 150, "g1": 9, "abs": 24, "fail": 0, "study": "2 to 5 hours", "higher": "Yes", "g3": 9, "need": 1, "p": 0.165, "ai": 0, "contrib": {"g1": 2.89, "abs": -0.45, "fail": -0.07, "study": -0.03, "higher": -0.03}}, {"id": 46, "row": 557, "g1": 7, "abs": 2, "fail": 3, "study": "2 to 5 hours", "higher": "Yes", "g3": 10, "need": 0, "p": 0.921, "ai": 1, "contrib": {"g1": 4.11, "abs": -0.02, "fail": 1.79, "study": -0.01, "higher": -0.02}}], "model": {"acc": 0.901, "n": 649, "fn": 42, "fp": 22, "tp": 58, "tn": 527}};
 const R = DATA.rounds, D = DATA.design;
 const FEAT = [["g1", "First test marks"], ["abs", "Classes missed this year"], ["fail", "Courses failed before"],
               ["study", "Study time per week"], ["higher", "Wants to go for higher studies"]];
 const ROUNDS = [
-  {label: "Round 1 of 3", title: "On your own", text: "Decide using only the student's record."},
-  {label: "Round 2 of 3", title: "With an AI suggestion", text: "An AI system has looked at the same record. Its suggestion is shown below the record. You make the final decision."},
-  {label: "Round 3 of 3", title: "With an AI suggestion, how sure it is, and why", text: "The AI now also shows how sure it is and what pushed its answer. You make the final decision."}
+  {label: "Round 1 of 3", title: "On your own", text: "Decide on your own."},
+  {label: "Round 2 of 3", title: "With an AI suggestion", text: "An AI gives its suggestion. You decide."},
+  {label: "Round 3 of 3", title: "With an AI suggestion, how sure it is, and why", text: "The AI also shows how sure it is and why. You decide."}
 ];
 let S = {r: 0, i: 0, ans: [[], [], []]};
-function save() { try { localStorage.setItem("hai-trust-v1", JSON.stringify(S)); } catch (e) {} }
-function load() { try { const s = JSON.parse(localStorage.getItem("hai-trust-v1")); if (s && s.ans) S = s; } catch (e) {} }
+function save() { try { localStorage.setItem("hai-trust-v2", JSON.stringify(S)); } catch (e) {} }
+function load() { try { const s = JSON.parse(localStorage.getItem("hai-trust-v2")); if (s && s.ans) S = s; } catch (e) {} }
 const $ = id => document.getElementById(id);
 const show = (id, on) => $(id).classList.toggle("hidden", !on);
 function showPart(n) { show("part1", n === 1); show("part2", n === 2); $("tab1").classList.toggle("on", n === 1); $("tab2").classList.toggle("on", n === 2); }
@@ -189,21 +186,17 @@ function aiSays(c) { return c.ai ? "Needs help" : "Will be fine"; }
 function sure(c) { return Math.round(100 * (c.ai ? c.p : 1 - c.p)); }
 function strength(v) { const a = Math.abs(v); return a >= 1 ? "a lot" : a >= 0.3 ? "somewhat" : "a little"; }
 function whyHTML(c) {
-  const items = FEAT.map(([k, n]) => [k, n, c.contrib[k]]).sort((a, b) => Math.abs(b[2]) - Math.abs(a[2]));
-  const mx = Math.max(...items.map(x => Math.abs(x[2])));
-  let h = `<div class="why"><b>Why:</b> compared with a typical student, each item pushed the risk up or down:<div class="f">`;
-  for (const [k, n, v] of items) {
-    const w = Math.max(2, Math.round(100 * Math.abs(v) / mx));
-    h += `<div>${n}: ${val(c, k)}</div><div><span class="wbar ${v < 0 ? "down" : ""}" style="display:inline-block;width:${w * 0.6}%"></span> ${v >= 0 ? "raises" : "lowers"} risk ${strength(v)}</div>`;
-  }
-  return h + `</div><div class="small">Black bar = raises the risk. White bar = lowers it. Overall risk: ${Math.round(100 * c.p)}%; above 50% the AI says "needs help".</div></div>`;
+  const items = FEAT.map(([k, n]) => [k, n, c.contrib[k]]).sort((a, b) => Math.abs(b[2]) - Math.abs(a[2])).slice(0, 3);
+  let h = `<div class="why"><b>Why (main reasons):</b><ul style="margin:4px 0">`;
+  for (const [k, n, v] of items) h += `<li>${n}: ${val(c, k)} → ${v >= 0 ? "<b>raises</b>" : "<b>lowers</b>"} risk ${strength(v)}</li>`;
+  return h + `</ul>Overall risk: <b>${Math.round(100 * c.p)}%</b> (above 50% = "needs help")</div>`;
 }
 function render() {
   if (S.r >= 3) return finish();
   const c = R[S.r][S.i], m = ROUNDS[S.r];
   show("intro", false); show("between", false); show("result", false); show("play", true);
   $("roundLabel").textContent = m.label; $("roundTitle").textContent = m.title; $("roundText").textContent = m.text;
-  $("progress").textContent = `Student ${S.i + 1} of 4`;
+  $("progress").textContent = `Student ${S.i + 1} of ${R[S.r].length}`;
   $("caseCard").innerHTML = record(c);
   if (S.r === 0) show("aiBox", false);
   else {
@@ -216,13 +209,13 @@ function render() {
 function startTrust() { render(); }
 function answer(a) {
   S.ans[S.r][S.i] = a; S.i++;
-  if (S.i === 4) { S.r++; S.i = 0; save(); return S.r < 3 ? betweenRounds() : finish(); }
+  if (S.i === R[S.r].length) { S.r++; S.i = 0; save(); return S.r < 3 ? betweenRounds() : finish(); }
   save(); render();
 }
 function betweenRounds() {
   show("play", false); show("between", true);
   $("betweenTitle").textContent = `Round ${S.r} done`;
-  $("betweenText").textContent = S.r === 1 ? "Next: the same kind of decisions, but now an AI system gives a suggestion." : "Next: the AI also shows how sure it is and why.";
+  $("betweenText").textContent = S.r === 1 ? "Next: an AI gives a suggestion." : "Next: the AI also shows how sure it is and why.";
   $("betweenBtn").textContent = `Start round ${S.r + 1}`;
   window.scrollTo(0, 0);
 }
@@ -241,11 +234,10 @@ function finish() {
   show("intro", false); show("play", false); show("between", false); show("result", true);
   const s = stats();
   $("pollNum").textContent = s.poll;
-  $("scoreTable").innerHTML = `<tr><th>Round</th><th>Your correct decisions</th><th>Followed the AI when it was wrong?</th></tr>` +
-    ["1 · On your own", "2 · With AI suggestion", "3 · With suggestion, how sure, and why"].map((n, r) =>
-      `<tr><td>${n}</td><td><b>${s.correct[r]} of 4</b></td><td>${r === 0 ? "(no AI)" : s.followedWrong[r] ? '<span class="no">Yes</span>' : '<span class="ok">No</span>'}</td></tr>`).join("");
-  $("scoreNotes").innerHTML = `In rounds 2 and 3 you agreed with the AI on <b>${s.agree} of ${s.aiShown}</b> students. ` +
-    `The AI was wrong on one student in each of these rounds. ` +
+  $("scoreTable").innerHTML = `<tr><th>Round</th><th>Correct</th><th>Wrong AI suggestions you followed</th></tr>` +
+    ["1 · On your own", "2 · With AI suggestion", "3 · With how sure and why"].map((n, r) =>
+      `<tr><td>${n}</td><td><b>${s.correct[r]} of ${R[r].length}</b></td><td>${r === 0 ? "(no AI)" : `<span class="${s.followedWrong[r] ? "no" : "ok"}">${s.followedWrong[r]} of ${s.wrongAI[r]}</span>`}</td></tr>`).join("");
+  $("scoreNotes").innerHTML = `You agreed with the AI on <b>${s.agree} of ${s.aiShown}</b> students. ` +
     (s.overrodeRight ? `You disagreed with a <b>correct</b> AI suggestion ${s.overrodeRight} time${s.overrodeRight > 1 ? "s" : ""}.` : `You never disagreed with a correct AI suggestion.`);
   let t = `<tr><th>Round</th><th>Student</th><th>You said</th><th>AI said</th><th>What really happened</th></tr>`;
   R.forEach((cs, r) => cs.forEach((c, i) => {
@@ -256,8 +248,8 @@ function finish() {
   $("answerTable").innerHTML = t;
   const m = DATA.model;
   $("aboutAI").textContent = `About the AI: on students it had not seen, it was right ${Math.round(100 * m.acc)}% of the time (${m.n} students). ` +
-    `Of the ${m.tp + m.fn} students who really needed help, it missed ${m.fn}. Here it was wrong on 1 student in 4 in rounds 2 and 3, more often than usual, so that we can see what happens. ` +
-    `Each round has the same mix of students, so the rounds are equally hard. Every AI answer shown is its real answer.`;
+    `Of the ${m.tp + m.fn} students who really needed help, it missed ${m.fn}. Here we chose many borderline students, and the AI was wrong on 2 of 6 in rounds 2 and 3, more often than usual. ` +
+    `Each round has the same mix of students. Every AI answer shown is its real answer.`;
   drawScoreCard(); window.scrollTo(0, 0);
 }
 function restart() { S = {r: 0, i: 0, ans: [[], [], []]}; save(); show("result", false); show("intro", true); }
@@ -279,23 +271,23 @@ function drawScoreCard() {
   frame(ctx, cv.width, cv.height, "My score card: deciding with an AI", name);
   let y = name ? 210 : 170;
   ctx.font = `30px ${FONT}`; ctx.fillStyle = "#1d1d1d";
-  const rows = [["Round 1 · on my own", s.correct[0] + " of 4 correct", ""],
-                ["Round 2 · with AI suggestion", s.correct[1] + " of 4 correct", s.followedWrong[1] ? "followed the AI when it was wrong" : "did not follow the wrong AI"],
-                ["Round 3 · with how sure and why", s.correct[2] + " of 4 correct", s.followedWrong[2] ? "followed the AI when it was wrong" : "did not follow the wrong AI"]];
+  const rows = [["Round 1 · on my own", s.correct[0] + " of 6 correct", ""],
+                ["Round 2 · with AI suggestion", s.correct[1] + " of 6 correct", `followed ${s.followedWrong[1]} of ${s.wrongAI[1]} wrong suggestions`],
+                ["Round 3 · with how sure and why", s.correct[2] + " of 6 correct", `followed ${s.followedWrong[2]} of ${s.wrongAI[2]} wrong suggestions`]];
   for (const [a, b, c] of rows) {
     ctx.fillStyle = "#1d1d1d"; ctx.font = `30px ${FONT}`; ctx.fillText(a, 36, y);
     ctx.font = `bold 30px ${FONT}`; ctx.fillText(b, 520, y);
-    ctx.font = `26px ${FONT}`; ctx.fillStyle = c.startsWith("followed") ? "#a11" : "#1b6b1b"; ctx.fillText(c, 760, y);
+    ctx.font = `26px ${FONT}`; ctx.fillStyle = /followed 0 /.test(c) ? "#1b6b1b" : "#a11"; ctx.fillText(c, 760, y);
     y += 62;
   }
   ctx.strokeStyle = "#7a1f1f"; ctx.lineWidth = 3; ctx.strokeRect(36, y, 1128, 150);
   ctx.fillStyle = "#7a1f1f"; ctx.font = `bold 72px ${FONT}`; ctx.fillText(String(s.poll), 64, y + 100);
   ctx.fillStyle = "#1d1d1d"; ctx.font = `30px ${FONT}`;
-  ctx.fillText("wrong AI suggestions I followed (out of 2)", 140, y + 64);
+  ctx.fillText("wrong AI suggestions I followed (out of 4)", 140, y + 64);
   ctx.font = `26px ${FONT}`;
   ctx.fillText(`I agreed with the AI on ${s.agree} of ${s.aiShown} students it advised on.`, 140, y + 108);
   ctx.fillStyle = "#555"; ctx.font = `22px ${FONT}`;
-  ctx.fillText("Real student records (UCI Student Performance data). 4 students per round: a small sample.", 36, y + 200);
+  ctx.fillText("Real student records (UCI Student Performance data). 6 students per round: a small sample.", 36, y + 200);
 }
 function savePNG(id, file) {
   const a = document.createElement("a"); a.href = $(id).toDataURL("image/png"); a.download = file;
